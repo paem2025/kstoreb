@@ -3,6 +3,7 @@ package com.latiendadekellyb.demo.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -21,7 +22,8 @@ public class LandingSettingsEntity extends AuditableEntity {
     @Column(name = "brand_name", nullable = false, length = 255)
     private String brandName = "Kelly Store";
 
-    @Column(name = "logo_url", nullable = false, length = 2000)
+    @Lob
+    @Column(name = "logo_url", nullable = false, columnDefinition = "TEXT")
     private String logoUrl = "/images/logo.jpg";
 
     @Column(name = "nav_catalog_label", nullable = false, length = 120)
@@ -42,7 +44,8 @@ public class LandingSettingsEntity extends AuditableEntity {
     @Column(name = "hero_title_highlight", nullable = false, length = 255)
     private String heroTitleHighlight = "disfruta cada momento";
 
-    @Column(name = "hero_description", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "hero_description", nullable = false, columnDefinition = "TEXT")
     private String heroDescription = "Descubri nuestra linea completa de ollas, sartenes y accesorios. Calidad que se siente en cada receta.";
 
     @Column(name = "hero_primary_cta_label", nullable = false, length = 120)
@@ -54,13 +57,16 @@ public class LandingSettingsEntity extends AuditableEntity {
     @Column(name = "catalog_title", nullable = false, length = 255)
     private String catalogTitle = "Nuestro catalogo";
 
-    @Column(name = "catalog_description", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "catalog_description", nullable = false, columnDefinition = "TEXT")
     private String catalogDescription = "Explora todos nuestros productos y encontra lo que necesitas para tu cocina.";
 
-    @Column(name = "footer_description", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "footer_description", nullable = false, columnDefinition = "TEXT")
     private String footerDescription = "Productos de cocina premium para quienes disfrutan cocinar. Calidad, durabilidad y diseno en cada pieza.";
 
-    @Column(name = "footer_contact_text", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "footer_contact_text", nullable = false, columnDefinition = "TEXT")
     private String footerContactText = "Escribinos por WhatsApp para consultas, pedidos o asesoramiento personalizado.";
 
     @Column(name = "whatsapp_button_label", nullable = false, length = 120)
@@ -69,10 +75,12 @@ public class LandingSettingsEntity extends AuditableEntity {
     @Column(name = "whatsapp_number", nullable = false, length = 40)
     private String whatsappNumber = "5491124848417";
 
-    @Column(name = "whatsapp_default_message", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "whatsapp_default_message", nullable = false, columnDefinition = "TEXT")
     private String whatsappDefaultMessage = "Hola! Quiero consultar por productos Kelly Store.";
 
-    @Column(name = "product_inquiry_template", nullable = false, length = 3000)
+    @Lob
+    @Column(name = "product_inquiry_template", nullable = false, columnDefinition = "TEXT")
     private String productInquiryTemplate = "Hola! Me interesa el producto: {product}. Me podrias dar mas info?";
 
     @Column(name = "copyright_text", nullable = false, length = 255)
