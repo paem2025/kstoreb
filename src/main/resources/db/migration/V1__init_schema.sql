@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS landing_settings (
   id VARCHAR(36) PRIMARY KEY,
-  slug VARCHAR(80) NOT NULL UNIQUE,
+  slug VARCHAR(80) NOT NULL,
   brand_name VARCHAR(255) NOT NULL,
   logo_url TEXT NOT NULL,
   nav_catalog_label VARCHAR(120) NOT NULL,
@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS landing_settings (
   product_inquiry_template TEXT NOT NULL,
   copyright_text VARCHAR(255) NOT NULL,
   created_at DATETIME(6) NOT NULL,
-  updated_at DATETIME(6) NOT NULL
+  updated_at DATETIME(6) NOT NULL,
+  CONSTRAINT uk_landing_settings_slug UNIQUE (slug)
 );
 
 CREATE TABLE IF NOT EXISTS products (

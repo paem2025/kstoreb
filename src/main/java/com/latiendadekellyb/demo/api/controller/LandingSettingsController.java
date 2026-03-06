@@ -3,6 +3,7 @@ package com.latiendadekellyb.demo.api.controller;
 import com.latiendadekellyb.demo.api.dto.LandingSettingsRequest;
 import com.latiendadekellyb.demo.api.dto.LandingSettingsResponse;
 import com.latiendadekellyb.demo.service.LandingSettingsService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class LandingSettingsController {
     }
 
     @PutMapping
-    public LandingSettingsResponse updateMain(@RequestBody LandingSettingsRequest request) {
+    public LandingSettingsResponse updateMain(@Valid @RequestBody LandingSettingsRequest request) {
         return landingSettingsService.updateMain(request);
     }
 }

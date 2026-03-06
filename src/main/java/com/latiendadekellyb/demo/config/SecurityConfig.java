@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,13 +18,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AdminTokenFilter adminTokenFilter) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
             .httpBasic(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .addFilterBefore(adminTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

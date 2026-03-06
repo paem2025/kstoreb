@@ -6,6 +6,8 @@ import com.latiendadekellyb.demo.domain.model.LandingSettingsEntity;
 import com.latiendadekellyb.demo.domain.repository.LandingSettingsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 public class LandingSettingsService {
@@ -20,86 +22,117 @@ public class LandingSettingsService {
 
     @Transactional(readOnly = true)
     public LandingSettingsResponse getMain() {
-        return toResponse(getOrCreateMainEntity());
+        return landingSettingsRepository.findBySlug(MAIN_SLUG)
+            .map(this::toResponse)
+            .orElseGet(() -> toResponse(newMainEntity()));
     }
 
     @Transactional
     public LandingSettingsResponse updateMain(LandingSettingsRequest request) {
-        LandingSettingsEntity entity = getOrCreateMainEntity();
+        LandingSettingsEntity entity = landingSettingsRepository.findBySlug(MAIN_SLUG)
+            .orElseGet(this::newMainEntity);
         applyRequest(entity, request);
         return toResponse(landingSettingsRepository.save(entity));
     }
 
-    private LandingSettingsEntity getOrCreateMainEntity() {
-        return landingSettingsRepository.findBySlug(MAIN_SLUG)
-            .orElseGet(() -> {
-                LandingSettingsEntity entity = new LandingSettingsEntity();
-                entity.setSlug(MAIN_SLUG);
-                return landingSettingsRepository.save(entity);
-            });
+    private LandingSettingsEntity newMainEntity() {
+        LandingSettingsEntity entity = new LandingSettingsEntity();
+        entity.setSlug(MAIN_SLUG);
+        return entity;
     }
 
     private void applyRequest(LandingSettingsEntity entity, LandingSettingsRequest request) {
-        if (request.brandName() != null) {
-            entity.setBrandName(request.brandName().trim());
+        String brandName = normalizeIfPresent(request.brandName(), "brandName");
+        if (brandName != null) {
+            entity.setBrandName(brandName);
         }
-        if (request.logoUrl() != null) {
-            entity.setLogoUrl(request.logoUrl().trim());
+        String logoUrl = normalizeIfPresent(request.logoUrl(), "logoUrl");
+        if (logoUrl != null) {
+            entity.setLogoUrl(logoUrl);
         }
-        if (request.navCatalogLabel() != null) {
-            entity.setNavCatalogLabel(request.navCatalogLabel().trim());
+        String navCatalogLabel = normalizeIfPresent(request.navCatalogLabel(), "navCatalogLabel");
+        if (navCatalogLabel != null) {
+            entity.setNavCatalogLabel(navCatalogLabel);
         }
-        if (request.navCategoriesLabel() != null) {
-            entity.setNavCategoriesLabel(request.navCategoriesLabel().trim());
+        String navCategoriesLabel = normalizeIfPresent(request.navCategoriesLabel(), "navCategoriesLabel");
+        if (navCategoriesLabel != null) {
+            entity.setNavCategoriesLabel(navCategoriesLabel);
         }
-        if (request.navContactLabel() != null) {
-            entity.setNavContactLabel(request.navContactLabel().trim());
+        String navContactLabel = normalizeIfPresent(request.navContactLabel(), "navContactLabel");
+        if (navContactLabel != null) {
+            entity.setNavContactLabel(navContactLabel);
         }
-        if (request.heroBadge() != null) {
-            entity.setHeroBadge(request.heroBadge().trim());
+        String heroBadge = normalizeIfPresent(request.heroBadge(), "heroBadge");
+        if (heroBadge != null) {
+            entity.setHeroBadge(heroBadge);
         }
-        if (request.heroTitle() != null) {
-            entity.setHeroTitle(request.heroTitle().trim());
+        String heroTitle = normalizeIfPresent(request.heroTitle(), "heroTitle");
+        if (heroTitle != null) {
+            entity.setHeroTitle(heroTitle);
         }
-        if (request.heroTitleHighlight() != null) {
-            entity.setHeroTitleHighlight(request.heroTitleHighlight().trim());
+        String heroTitleHighlight = normalizeIfPresent(request.heroTitleHighlight(), "heroTitleHighlight");
+        if (heroTitleHighlight != null) {
+            entity.setHeroTitleHighlight(heroTitleHighlight);
         }
-        if (request.heroDescription() != null) {
-            entity.setHeroDescription(request.heroDescription().trim());
+        String heroDescription = normalizeIfPresent(request.heroDescription(), "heroDescription");
+        if (heroDescription != null) {
+            entity.setHeroDescription(heroDescription);
         }
-        if (request.heroPrimaryCtaLabel() != null) {
-            entity.setHeroPrimaryCtaLabel(request.heroPrimaryCtaLabel().trim());
+        String heroPrimaryCtaLabel = normalizeIfPresent(request.heroPrimaryCtaLabel(), "heroPrimaryCtaLabel");
+        if (heroPrimaryCtaLabel != null) {
+            entity.setHeroPrimaryCtaLabel(heroPrimaryCtaLabel);
         }
-        if (request.heroSecondaryCtaLabel() != null) {
-            entity.setHeroSecondaryCtaLabel(request.heroSecondaryCtaLabel().trim());
+        String heroSecondaryCtaLabel = normalizeIfPresent(request.heroSecondaryCtaLabel(), "heroSecondaryCtaLabel");
+        if (heroSecondaryCtaLabel != null) {
+            entity.setHeroSecondaryCtaLabel(heroSecondaryCtaLabel);
         }
-        if (request.catalogTitle() != null) {
-            entity.setCatalogTitle(request.catalogTitle().trim());
+        String catalogTitle = normalizeIfPresent(request.catalogTitle(), "catalogTitle");
+        if (catalogTitle != null) {
+            entity.setCatalogTitle(catalogTitle);
         }
-        if (request.catalogDescription() != null) {
-            entity.setCatalogDescription(request.catalogDescription().trim());
+        String catalogDescription = normalizeIfPresent(request.catalogDescription(), "catalogDescription");
+        if (catalogDescription != null) {
+            entity.setCatalogDescription(catalogDescription);
         }
-        if (request.footerDescription() != null) {
-            entity.setFooterDescription(request.footerDescription().trim());
+        String footerDescription = normalizeIfPresent(request.footerDescription(), "footerDescription");
+        if (footerDescription != null) {
+            entity.setFooterDescription(footerDescription);
         }
-        if (request.footerContactText() != null) {
-            entity.setFooterContactText(request.footerContactText().trim());
+        String footerContactText = normalizeIfPresent(request.footerContactText(), "footerContactText");
+        if (footerContactText != null) {
+            entity.setFooterContactText(footerContactText);
         }
-        if (request.whatsappButtonLabel() != null) {
-            entity.setWhatsappButtonLabel(request.whatsappButtonLabel().trim());
+        String whatsappButtonLabel = normalizeIfPresent(request.whatsappButtonLabel(), "whatsappButtonLabel");
+        if (whatsappButtonLabel != null) {
+            entity.setWhatsappButtonLabel(whatsappButtonLabel);
         }
-        if (request.whatsappNumber() != null) {
-            entity.setWhatsappNumber(request.whatsappNumber().trim());
+        String whatsappNumber = normalizeIfPresent(request.whatsappNumber(), "whatsappNumber");
+        if (whatsappNumber != null) {
+            entity.setWhatsappNumber(whatsappNumber);
         }
-        if (request.whatsappDefaultMessage() != null) {
-            entity.setWhatsappDefaultMessage(request.whatsappDefaultMessage().trim());
+        String whatsappDefaultMessage = normalizeIfPresent(request.whatsappDefaultMessage(), "whatsappDefaultMessage");
+        if (whatsappDefaultMessage != null) {
+            entity.setWhatsappDefaultMessage(whatsappDefaultMessage);
         }
-        if (request.productInquiryTemplate() != null) {
-            entity.setProductInquiryTemplate(request.productInquiryTemplate().trim());
+        String productInquiryTemplate = normalizeIfPresent(request.productInquiryTemplate(), "productInquiryTemplate");
+        if (productInquiryTemplate != null) {
+            entity.setProductInquiryTemplate(productInquiryTemplate);
         }
-        if (request.copyrightText() != null) {
-            entity.setCopyrightText(request.copyrightText().trim());
+        String copyrightText = normalizeIfPresent(request.copyrightText(), "copyrightText");
+        if (copyrightText != null) {
+            entity.setCopyrightText(copyrightText);
         }
+    }
+
+    private String normalizeIfPresent(String value, String fieldName) {
+        if (value == null) {
+            return null;
+        }
+        String normalized = value.trim();
+        if (normalized.isEmpty()) {
+            throw new ResponseStatusException(BAD_REQUEST, fieldName + " cannot be blank");
+        }
+        return normalized;
     }
 
     private LandingSettingsResponse toResponse(LandingSettingsEntity entity) {
