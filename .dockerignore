@@ -1,0 +1,7 @@
+target
+.git
+.idea
+tmp-*.log
+HELP.md
+DATABASE_SETUP.md
+DEPLOY_COOLIFY.md
