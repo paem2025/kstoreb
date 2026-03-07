@@ -3,6 +3,7 @@ package com.latiendadekellyb.demo.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -27,7 +28,8 @@ public class ProductEntity extends AuditableEntity {
     @Column(name = "category", nullable = false, length = 120)
     private String category;
 
-    @Column(name = "image_url", nullable = false, length = 2000)
+    @Lob
+    @Column(name = "image_url", nullable = false, columnDefinition = "LONGTEXT")
     private String imageUrl;
 
     @Column(name = "featured", nullable = false)

@@ -23,7 +23,7 @@ public record ProductRequest(
     String category,
 
     @NotBlank(message = "image is required")
-    @Size(max = 2000, message = "image max length is 2000")
+    @Size(max = 1500000, message = "image max length is 1500000")
     String image,
 
     Boolean featured,

@@ -7,7 +7,7 @@ public record LandingSettingsRequest(
     @Size(max = 255, message = "brandName max length is 255")
     String brandName,
 
-    @Size(max = 2000, message = "logoUrl max length is 2000")
+    @Size(max = 1500000, message = "logoUrl max length is 1500000")
     String logoUrl,
 
     @Size(max = 120, message = "navCatalogLabel max length is 120")
