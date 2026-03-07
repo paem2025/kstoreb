@@ -55,3 +55,22 @@ After deploy:
 1. Check logs for Flyway migration success.
 2. Call `GET /api/health`.
 3. Call `GET /api/products` and `GET /api/landing`.
+
+## Optional: H2 single-container mode (no MySQL)
+
+If you want a lightweight setup with very little data and no separate DB service,
+you can run with profile `h2`.
+
+Use these environment variables:
+
+```env
+PORT=8080
+SPRING_PROFILES_ACTIVE=h2
+APP_ADMIN_TOKEN=<strong-random-admin-token>
+APP_CORS_ALLOWED_ORIGINS=https://<frontend-domain>,https://www.<frontend-domain>
+```
+
+Recommended in Coolify:
+
+- Add a persistent volume mounted at `/app/data` to keep H2 file data between restarts.
+- Keep health check at `/api/health`.
