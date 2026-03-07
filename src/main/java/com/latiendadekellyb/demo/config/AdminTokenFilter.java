@@ -21,9 +21,14 @@ public class AdminTokenFilter extends OncePerRequestFilter {
     private static final List<String> PROTECTED_PREFIXES = List.of("/api/products", "/api/landing");
 
     private final String adminToken;
+    private final boolean requireAdminToken;
 
-    public AdminTokenFilter(@Value("${app.security.admin-token:}") String adminToken) {
+    public AdminTokenFilter(
+        @Value("${app.security.admin-token:}") String adminToken,
+        @Value("${app.security.require-admin-token:true}") boolean requireAdminToken
+    ) {
         this.adminToken = adminToken == null ? "" : adminToken.trim();
+        this.requireAdminToken = requireAdminToken;
     }
 
     @Override
@@ -36,6 +41,11 @@ public class AdminTokenFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         if (!isProtectedPath(path) || READ_ONLY_METHODS.contains(method)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (!requireAdminToken) {
             filterChain.doFilter(request, response);
             return;
         }
